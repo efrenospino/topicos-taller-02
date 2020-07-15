@@ -45,8 +45,8 @@ app.post('/users',  (req, res) => {
         return;
     }
     
-    if(!"F" === gender ||  !"M" === gender)  {
-        res.status(400).send(`El dato  ${gender} debe ser \"F\" o \"M\"`);
+    if(!("F" === gender ||  "M" === gender))  {
+        res.status(400).send(`El dato gender con valor ${gender} debe ser \"F\" o \"M\"`);
         return;
     }
     
@@ -83,6 +83,24 @@ app.post('/users',  (req, res) => {
 
 app.get('/users', (req, res) =>{
     res.status(200).send(users);
+});
+
+app.get('/users/lastname/:lastname', (req, res) =>{
+    const lastname =req.params.lastname;
+    
+    res.status(200).send(users.filter(r=>r.lastname == lastname));
+});
+
+app.get('/users/gender/:gender', (req, res) =>{
+    const gender =req.params.gender.toUpperCase();
+    
+    res.status(200).send(users.filter(r=>r.gender == gender));
+});
+
+app.delete('/users/:id', (req, res) =>{
+    const id =req.params.id;
+    users.splice(id,1)
+    res.status(200).send("Usuario Eliminado Correctamente");
 });
 
 app.listen(3000, () =>{ 
