@@ -10,7 +10,7 @@ const bmi = require('./bmi');
 
 //Modelos
 const users = [];
-const loggerMiddleware = (req, res, next) => {
+const loggerMiddleware = (req, _, next) => {
     console.log(logger(req));
     next();
 }
@@ -89,6 +89,15 @@ app.get('/users', (req, res) => {
     res.status(200).send(users);
 });
 
+app.get('/users/:id', (req, res) => {
+    const user = users[req.params.id];
+    if (user === undefined) {
+        res.sendStatus(404)
+        return;
+    }
+    res.status(200).send(user);
+});
+
 app.get('/users/lastname/:lastname', (req, res) => {
     const lastname = req.params.lastname;
     res.status(200).send(users.filter(r => r.lastname == lastname));
@@ -109,16 +118,16 @@ app.get('/users/bmi', (req, res) => {
 
 app.get('/users/bmi/:id', (req, res) => {
 
-    const user = users[req.params.id]
+    const user = users[req.params.id];
     if (user === undefined) {
-        res.status(400).send("User not found");
-        return
+        res.sendStatus(404)
+        return;
     }
 
     const calculatedBMI = bmi(user.weight, user.height);
     if (calculatedBMI === "Error") {
         res.status(400).send("Error");
-        return
+        return;
     }
 
     res.status(200).send(`BMI for user is ${calculatedBMI}`);
@@ -126,12 +135,12 @@ app.get('/users/bmi/:id', (req, res) => {
 
 app.delete('/users/:id', (req, res) => {
     const id = req.params.id;
-    users.splice(id, 1)
+    users.splice(id, 1);
     res.status(200).send("Usuario Eliminado Correctamente");
 });
 
 app.get("/", (req, res) => {
-    res.status(200).send("Taller 01 - Tópicos Especiales I")
+    res.status(200).send("Taller 01 - Tópicos Especiales I");
 });
 
 app.listen(3000, () => {
