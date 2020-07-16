@@ -6,6 +6,7 @@ const app = express();
 //Importar módulo personalizado
 const validador = require('./validador');
 const logger = require('./logger');
+const bmi = require('./bmi');
 
 //Modelos
 const users = [];
@@ -90,14 +91,37 @@ app.get('/users', (req, res) => {
 
 app.get('/users/lastname/:lastname', (req, res) => {
     const lastname = req.params.lastname;
-
     res.status(200).send(users.filter(r => r.lastname == lastname));
 });
 
 app.get('/users/gender/:gender', (req, res) => {
     const gender = req.params.gender.toUpperCase();
-
     res.status(200).send(users.filter(r => r.gender == gender));
+});
+
+app.get('/users/bmi', (req, res) => {
+    const usersWithHeightAndWeight = users.filter(u => u.height != undefined || u.weight != undefined)
+    const bmiForUsers = usersWithHeightAndWeight.map(function(u) {
+        return { user: `${u.name} ${u.lastname}`, bmi: bmi(u.weight, u.height) };
+    });
+    res.status(200).send(bmiForUsers);
+});
+
+app.get('/users/bmi/:id', (req, res) => {
+
+    const user = users[req.params.id]
+    if (user === undefined) {
+        res.status(400).send("User not found");
+        return
+    }
+
+    const calculatedBMI = bmi(user.weight, user.height);
+    if (calculatedBMI === "Error") {
+        res.status(400).send("Error");
+        return
+    }
+
+    res.status(200).send(`BMI for user is ${calculatedBMI}`);
 });
 
 app.delete('/users/:id', (req, res) => {
