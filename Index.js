@@ -108,6 +108,10 @@ app.get('/users/gender/:gender', (req, res) => {
     res.status(200).send(users.filter(r => r.gender == gender));
 });
 
+app.get('/users/telephone', (req, res) => {
+    res.status(200).send(users.filter(u => u.telephones != undefined && u.telephones.length > 0));
+});
+
 app.get('/users/bmi', (req, res) => {
     const usersWithHeightAndWeight = users.filter(u => u.height != undefined || u.weight != undefined)
     const bmiForUsers = usersWithHeightAndWeight.map(function(u) {
