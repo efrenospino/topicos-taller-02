@@ -100,7 +100,7 @@ app.get('/users/:id', (req, res) => {
 
 app.get('/users/lastname/:lastname', (req, res) => {
     const lastname = req.params.lastname;
-    res.status(200).send(users.filter(r => r.lastname == lastname));
+    res.status(200).send(users.filter(r => r.lastname.toLowerCase() == lastname.toLowerCase()));
 });
 
 app.get('/users/gender/:gender', (req, res) => {
