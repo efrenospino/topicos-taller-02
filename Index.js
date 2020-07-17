@@ -6,10 +6,11 @@ const app = express();
 //Importar módulo personalizado
 const validador = require('./validador');
 const logger = require('./logger');
+const bmi = require('./bmi');
 
 //Modelos
 const users = [];
-const loggerMiddleware = (req, res, next) => {
+const loggerMiddleware = (req, _, next) => {
     console.log(logger(req));
     next();
 }
@@ -88,26 +89,63 @@ app.get('/users', (req, res) => {
     res.status(200).send(users);
 });
 
+app.get('/users/:id([0-9])', (req, res) => {
+    const user = users[req.params.id];
+    if (user === undefined) {
+        res.sendStatus(404)
+        return;
+    }
+    res.status(200).send(user);
+});
+
 app.get('/users/lastname/:lastname', (req, res) => {
     const lastname = req.params.lastname;
-
-    res.status(200).send(users.filter(r => r.lastname == lastname));
+    res.status(200).send(users.filter(r => r.lastname.toLowerCase() == lastname.toLowerCase()));
 });
 
 app.get('/users/gender/:gender', (req, res) => {
     const gender = req.params.gender.toUpperCase();
-
     res.status(200).send(users.filter(r => r.gender == gender));
 });
 
-app.delete('/users/:id', (req, res) => {
+app.get('/users/telephone', (req, res) => {
+    res.status(200).send(users.filter(u => u.telephones != undefined && u.telephones.length > 0));
+});
+
+app.get('/users/bmi', (req, res) => {
+    req.params
+    const usersWithHeightAndWeight = users.filter(u => u.height != undefined || u.weight != undefined)
+    const bmiForUsers = usersWithHeightAndWeight.map(function(u) {
+        return { user: `${u.name} ${u.lastname}`, bmi: bmi(u.weight, u.height) };
+    });
+    res.status(200).send(bmiForUsers);
+});
+
+app.get('/users/bmi/:id([0-9])', (req, res) => {
+
+    const user = users[req.params.id];
+    if (user === undefined) {
+        res.sendStatus(404)
+        return;
+    }
+
+    const calculatedBMI = bmi(user.weight, user.height);
+    if (calculatedBMI === "Error") {
+        res.status(400).send("Error");
+        return;
+    }
+
+    res.status(200).send(`BMI for user is ${calculatedBMI}`);
+});
+
+app.delete('/users/:id([0-9])', (req, res) => {
     const id = req.params.id;
-    users.splice(id, 1)
+    users.splice(id, 1);
     res.status(200).send("Usuario Eliminado Correctamente");
 });
 
-app.get("/", (req, res) => {
-    res.status(200).send("Taller 01 - Tópicos Especiales I")
+app.get('*', (req, res) => {
+    res.send('URL inválida.');
 });
 
 app.listen(3000, () => {
