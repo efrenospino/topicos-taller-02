@@ -11,8 +11,8 @@ const bmi = require('./bmi');
 //Modelos
 const users = [];
 const loggerMiddleware = (req, _, next) => {
-    console.log(logger(req));
     next();
+    console.log(logger(req));
 }
 
 //middlewares
@@ -113,7 +113,6 @@ app.get('/users/telephone', (req, res) => {
 });
 
 app.get('/users/bmi', (req, res) => {
-    req.params
     const usersWithHeightAndWeight = users.filter(u => u.height != undefined || u.weight != undefined)
     const bmiForUsers = usersWithHeightAndWeight.map(function(u) {
         return { user: `${u.name} ${u.lastname}`, bmi: bmi(u.weight, u.height) };
