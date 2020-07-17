@@ -89,7 +89,7 @@ app.get('/users', (req, res) => {
     res.status(200).send(users);
 });
 
-app.get('/users/:id', (req, res) => {
+app.get('/users/:id([0-9])', (req, res) => {
     const user = users[req.params.id];
     if (user === undefined) {
         res.sendStatus(404)
@@ -113,6 +113,7 @@ app.get('/users/telephone', (req, res) => {
 });
 
 app.get('/users/bmi', (req, res) => {
+    req.params
     const usersWithHeightAndWeight = users.filter(u => u.height != undefined || u.weight != undefined)
     const bmiForUsers = usersWithHeightAndWeight.map(function(u) {
         return { user: `${u.name} ${u.lastname}`, bmi: bmi(u.weight, u.height) };
@@ -120,7 +121,7 @@ app.get('/users/bmi', (req, res) => {
     res.status(200).send(bmiForUsers);
 });
 
-app.get('/users/bmi/:id', (req, res) => {
+app.get('/users/bmi/:id([0-9])', (req, res) => {
 
     const user = users[req.params.id];
     if (user === undefined) {
@@ -137,14 +138,14 @@ app.get('/users/bmi/:id', (req, res) => {
     res.status(200).send(`BMI for user is ${calculatedBMI}`);
 });
 
-app.delete('/users/:id', (req, res) => {
+app.delete('/users/:id([0-9])', (req, res) => {
     const id = req.params.id;
     users.splice(id, 1);
     res.status(200).send("Usuario Eliminado Correctamente");
 });
 
-app.get("/", (req, res) => {
-    res.status(200).send("Taller 01 - Tópicos Especiales I");
+app.get('*', (req, res) => {
+    res.send('URL inválida.');
 });
 
 app.listen(3000, () => {
