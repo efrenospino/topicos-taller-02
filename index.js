@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 
 //Importar módulo personalizado
+const mongoose = require('mongoose');
 const validador = require('./api/functions/validador');
 const logger = require('./api/middlewares/logger');
 const bmi = require('./api/functions/bmi');
@@ -149,6 +150,13 @@ app.delete('/users/:id([0-9])', (req, res) => {
 app.get('*', (req, res) => {
     res.send('URL inválida.');
 });
+
+mongoose.connect('mongodb://localhost/twitter', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}, () => {
+    console.log('Connected to DB');
+})
 
 app.listen(3000, () => {
     console.log("Servidor Iniciado");

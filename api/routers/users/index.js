@@ -6,7 +6,7 @@ router.route('/')
     .get(controller.getAll)
     .post(controller.create)
 
-router.route('/:id([0-9])')
+router.route('/:id')
     .get(controller.getByID)
     .put(controller.update)
     .delete(controller.remove);
