@@ -4,9 +4,10 @@ const express = require('express');
 const app = express();
 
 //Importar módulo personalizado
-const validador = require('./validador');
-const logger = require('./logger');
-const bmi = require('./bmi');
+const validador = require('./api/functions/validador');
+const logger = require('./api/middlewares/logger');
+const bmi = require('./api/functions/bmi');
+const api = require('./api');
 
 //Modelos
 const users = [];
@@ -18,6 +19,8 @@ const loggerMiddleware = (req, _, next) => {
 //middlewares
 app.use(express.json());
 app.use(loggerMiddleware);
+
+app.use('/api', api);
 
 app.post('/users', (req, res) => {
 
