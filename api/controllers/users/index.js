@@ -1,4 +1,5 @@
 const User = require('./../../models/users');
+const Tweet = require('./../../models/tweets');
 
 const getAll = (_, res) => {
     User.find({}, ['username', 'name'])
@@ -49,4 +50,12 @@ const remove = (req, res) => {
         .catch(() => res.sendStatus(500));
 }
 
-module.exports = { getAll, getByID, create, update, remove };
+const getUserTweets = (req, res) => {
+    Tweet.find({ user: req.params.id })
+        .populate('user', ['username', 'name'])
+        .populate('comments.user', ['username', 'name'])
+        .then((r) => res.send(r))
+        .catch((_) => res.sendStatus(500));
+}
+
+module.exports = { getAll, getByID, create, update, remove, getUserTweets };

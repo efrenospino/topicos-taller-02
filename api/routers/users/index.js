@@ -11,4 +11,7 @@ router.route('/:id')
     .put(controller.update)
     .delete(controller.remove);
 
+router.route('/:id/tweets')
+    .get(controller.getUserTweets);
+
 module.exports = router;
