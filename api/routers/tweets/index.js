@@ -14,4 +14,7 @@ router.route('/:id')
 router.route('/:id/comment')
     .post(controller.newComment);
 
+router.route('/:id/comments')
+    .delete(controller.removeComment);
+
 module.exports = router;

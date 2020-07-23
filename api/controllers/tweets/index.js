@@ -54,4 +54,16 @@ const newComment = (req, res) => {
         .catch(() => res.sendStatus(500));
 }
 
-module.exports = { getAll, getByID, create, update, remove, newComment };
+const removeComment = (req, res) => {
+    Tweet.updateOne({ _id: req.params.id }, {
+            $pull: {
+                comments: {
+                    _id: req.body.commentID
+                }
+            }
+        })
+        .then((r) => res.send(r))
+        .catch(() => res.sendStatus(500));
+}
+
+module.exports = { getAll, getByID, create, update, remove, newComment, removeComment };
