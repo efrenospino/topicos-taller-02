@@ -6,6 +6,9 @@ router.route('/')
     .get(controller.getAll)
     .post(controller.create)
 
+router.route('/lasts/:count')
+    .get(controller.getLastNTweets);
+
 router.route('/:id')
     .get(controller.getByID)
     .put(controller.update)

@@ -66,4 +66,23 @@ const removeComment = (req, res) => {
         .catch(() => res.sendStatus(500));
 }
 
-module.exports = { getAll, getByID, create, update, remove, newComment, removeComment };
+const getLastNTweets = (req, res) => {
+    Tweet.find()
+        .limit(Number(req.params.count))
+        .sort({ createdAt: -1 })
+        .populate('user', ['username', 'name'])
+        .populate('comments.user', ['username', 'name'])
+        .then((r) => res.send(r))
+        .catch((_) => res.sendStatus(500));
+}
+
+module.exports = {
+    getAll,
+    getByID,
+    create,
+    update,
+    remove,
+    newComment,
+    removeComment,
+    getLastNTweets
+};
