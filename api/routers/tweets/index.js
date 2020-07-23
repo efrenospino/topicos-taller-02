@@ -20,4 +20,7 @@ router.route('/:id/comment')
 router.route('/:id/comments')
     .delete(controller.removeComment);
 
+router.route('/:id/comments/count')
+    .get(controller.getCommentsCount)
+
 module.exports = router;

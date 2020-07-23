@@ -76,6 +76,14 @@ const getLastNTweets = (req, res) => {
         .catch((_) => res.sendStatus(500));
 }
 
+const getCommentsCount = (req, res) => {
+    Tweet.aggregate()
+        .match({ _id: require('mongoose').Types.ObjectId(req.params.id) })
+        .project({ numberOfComments: { $size: '$comments' } })
+        .then((r) => res.send(r[0]))
+        .catch(() => res.sendStatus(500));
+}
+
 module.exports = {
     getAll,
     getByID,
@@ -84,5 +92,6 @@ module.exports = {
     remove,
     newComment,
     removeComment,
-    getLastNTweets
+    getLastNTweets,
+    getCommentsCount
 };
