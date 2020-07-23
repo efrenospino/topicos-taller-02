@@ -9,7 +9,6 @@ const logger = require('./api/middlewares/logger');
 const api = require('./api');
 
 //Modelos
-const users = [];
 const loggerMiddleware = (req, _, next) => {
     next();
     console.log(logger(req));
@@ -21,7 +20,7 @@ app.use(loggerMiddleware);
 
 app.use('/api', api);
 
-app.get('*', (req, res) => {
+app.get('*', (_, res) => {
     res.send('URL inválida.');
 });
 
