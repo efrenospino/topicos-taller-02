@@ -1,6 +1,5 @@
 const User = require('./../../models/users');
-const Tweet = require("../../models/tweets");
-const { count } = require('./../../models/users');
+const Tweet = require('./../../models/tweets');
 
 const getAll = (_, res) => {
     User.find({}, ['username', 'name'])
@@ -23,16 +22,16 @@ const create = (req, res) => {
         email: req.body.email,
         telephones: req.body.telephones
     };
-    if (user.name && user.password && user.age && user.username && user.email){
+    if (user.name && user.password && user.age && user.username && user.email) {
         const object = new User(user);
         object.save()
-        .then((response)=>{
-            res.status(201).send(`^El usuario fue creado con Id: ${response._id}`);
-        })
-        .catch((err)=>{
-            send.sendStatus(500);
-        })
-    }else{
+            .then((response) => {
+                res.status(201).send(`^El usuario fue creado con Id: ${response._id}`);
+            })
+            .catch((err) => {
+                send.sendStatus(500);
+            })
+    } else {
         send.sendStatus(500);
     }
 }
@@ -59,14 +58,22 @@ const remove = (req, res) => {
         .catch(() => res.sendStatus(500));
 }
 
-const getCountTweets =  (req, res) => {
+const getUserTweets = (req, res) => {
+    Tweet.find({ user: req.params.id })
+        .populate('user', ['username', 'name'])
+        .populate('comments.user', ['username', 'name'])
+        .then((r) => res.send(r))
+        .catch((_) => res.sendStatus(500));
+}
 
-     
+const getCountTweets = (req, res) => {
+
+
 
 
 }
- 
 
 
 
-module.exports = { getAll, getByID, create, update, remove,getCountTweets };
+
+module.exports = { getAll, getByID, create, update, remove, getCountTweets, getUserTweets };

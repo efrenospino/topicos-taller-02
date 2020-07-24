@@ -62,4 +62,44 @@ const newComment = (req, res) => {
         .catch(() => res.sendStatus(500));
 } 
 
-module.exports = { getAll, getByID, create, update, remove, newComment };
+const removeComment = (req, res) => {
+    Tweet.updateOne({ _id: req.params.id }, {
+            $pull: {
+                comments: {
+                    _id: req.body.commentID
+                }
+            }
+        })
+        .then((r) => res.send(r))
+        .catch(() => res.sendStatus(500));
+}
+
+const getLastNTweets = (req, res) => {
+    Tweet.find()
+        .limit(Number(req.params.count))
+        .sort({ createdAt: -1 })
+        .populate('user', ['username', 'name'])
+        .populate('comments.user', ['username', 'name'])
+        .then((r) => res.send(r))
+        .catch((_) => res.sendStatus(500));
+}
+
+const getCommentsCount = (req, res) => {
+    Tweet.aggregate()
+        .match({ _id: require('mongoose').Types.ObjectId(req.params.id) })
+        .project({ numberOfComments: { $size: '$comments' } })
+        .then((r) => res.send(r[0]))
+        .catch(() => res.sendStatus(500));
+}
+
+module.exports = {
+    getAll,
+    getByID,
+    create,
+    update,
+    remove,
+    newComment,
+    removeComment,
+    getLastNTweets,
+    getCommentsCount
+};
