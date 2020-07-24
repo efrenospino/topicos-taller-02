@@ -10,6 +10,10 @@ router.route('/')
 router.route('/lasts/:count')
     .get(controller.getLastNTweets);
 
+router.route('/top/commenters/:count')
+      .get(controller.getTopNTweet);
+    
+
 router.route('/:id')
     .get(controller.getByID)
     .put(controller.update);

@@ -92,6 +92,19 @@ const getCommentsCount = (req, res) => {
         .catch(() => res.sendStatus(500));
 }
 
+const getTopNTweet = (req, res)=>{
+    
+    Tweet.aggregate
+    ([
+        {$group: {_id: { ID_usuario: "$user"}, Nro: { $sum: 1}}}, 
+        {$sort : {Nro: -1} }
+    ])
+    .limit(Number(req.params.count))
+    .then((r) => res.send(r))
+    .catch(() => res.sendStatus(500));
+
+}
+
 module.exports = {
     getAll,
     getByID,
@@ -101,5 +114,6 @@ module.exports = {
     newComment,
     removeComment,
     getLastNTweets,
-    getCommentsCount
+    getCommentsCount,
+    getTopNTweet
 };

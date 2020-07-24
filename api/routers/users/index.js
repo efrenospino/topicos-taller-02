@@ -8,7 +8,7 @@ router.route('/')
     .delete(controller.remove);
 
 router.route('/tweets/count')
-    .get(controller.getCountTweets);
+    .get(controller.getCountTweets); 
 
 router.route('/:id')
     .get(controller.getByID)

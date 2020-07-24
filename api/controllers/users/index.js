@@ -74,9 +74,6 @@ const getCountTweets = (req, res) => {
     .catch((_) => res.sendStatus(404));
 
 
-}
-
-
-
+}  
 
 module.exports = { getAll, getByID, create, update, remove, getCountTweets, getUserTweets };
