@@ -67,13 +67,13 @@ const getUserTweets = (req, res) => {
 }
 
 const getCountTweets = (req, res) => {
+    
+
+    Tweet.find({ user: req.body.id })  
+    .then((r) => res.send(r.length.toString()))
+    .catch((_) => res.sendStatus(404));
 
 
-
-
-}
-
-
-
+}  
 
 module.exports = { getAll, getByID, create, update, remove, getCountTweets, getUserTweets };
