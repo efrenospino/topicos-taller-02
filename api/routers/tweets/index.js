@@ -27,4 +27,7 @@ router.route('/:id/comments')
 router.route('/:id/comments/count')
     .get(controller.getCommentsCount)
 
+router.route('/top/:count')
+    .get(controller.getTopCommentedTweets)
+
 module.exports = router;
