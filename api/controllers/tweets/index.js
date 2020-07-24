@@ -21,16 +21,16 @@ const create = (req, res) => {
         content: req.body.content,
         user: req.body.user
     };
-    if (tweet.content && tweet.user){
+    if (tweet.content && tweet.user) {
         const object = new Tweet(tweet);
         object.save()
-        .then((response)=>{
-            res.status(201).send(`El content fue creado con Id: ${response._id}`);
-        })
-        .catch((err)=>{
-            send.sendStatus(500);
-        })
-    }else{
+            .then((response) => {
+                res.status(201).send(`El content fue creado con Id: ${response._id}`);
+            })
+            .catch((err) => {
+                send.sendStatus(500);
+            })
+    } else {
         send.sendStatus(500);
     }
 }
@@ -60,7 +60,7 @@ const newComment = (req, res) => {
         })
         .then((r) => res.send(r))
         .catch(() => res.sendStatus(500));
-} 
+}
 
 const removeComment = (req, res) => {
     Tweet.updateOne({ _id: req.params.id }, {
@@ -92,17 +92,23 @@ const getCommentsCount = (req, res) => {
         .catch(() => res.sendStatus(500));
 }
 
-const getTopNTweet = (req, res)=>{
-    
-    Tweet.aggregate
-    ([
-        {$group: {_id: { ID_usuario: "$user"}, Nro: { $sum: 1}}}, 
-        {$sort : {Nro: -1} }
-    ])
-    .limit(Number(req.params.count))
-    .then((r) => res.send(r))
-    .catch(() => res.sendStatus(500));
+const getTopNTweet = (req, res) => {
 
+    Tweet.aggregate([
+            { $group: { _id: { ID_usuario: "$user" }, Nro: { $sum: 1 } } },
+            { $sort: { Nro: -1 } }
+        ])
+        .limit(Number(req.params.count))
+        .then((r) => res.send(r))
+        .catch(() => res.sendStatus(500));
+}
+
+const getTopCommentedTweets = (req, res) => {
+    Tweet.find()
+        .limit(Number(req.params.count))
+        .sort({ comments: -1 })
+        .then((r) => res.send(r))
+        .catch(() => res.sendStatus(500));
 }
 
 module.exports = {
@@ -115,5 +121,6 @@ module.exports = {
     removeComment,
     getLastNTweets,
     getCommentsCount,
-    getTopNTweet
+    getTopNTweet,
+    getTopCommentedTweets
 };
