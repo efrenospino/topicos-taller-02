@@ -17,14 +17,22 @@ const getByID = (req, res) => {
 }
 
 const create = (req, res) => {
-    const newTweet = {
+    const tweet = {
         content: req.body.content,
         user: req.body.user
+    };
+    if (tweet.content && tweet.user){
+        const object = new Tweet(tweet);
+        object.save()
+        .then((response)=>{
+            res.status(201).send(`El content fue creado con Id: ${response._id}`);
+        })
+        .catch((err)=>{
+            send.sendStatus(500);
+        })
+    }else{
+        send.sendStatus(500);
     }
-    new Tweet(newTweet)
-        .save()
-        .then((r) => res.send(r))
-        .catch(() => res.sendStatus(400));
 }
 
 const update = (req, res) => {
@@ -36,7 +44,7 @@ const update = (req, res) => {
 }
 
 const remove = (req, res) => {
-    Tweet.remove({ _id: req.params.id })
+    Tweet.remove({ _id: req.body.id })
         .then(() => res.sendStatus(200))
         .catch(() => res.sendStatus(500));
 }
@@ -52,7 +60,7 @@ const newComment = (req, res) => {
         })
         .then((r) => res.send(r))
         .catch(() => res.sendStatus(500));
-}
+} 
 
 const removeComment = (req, res) => {
     Tweet.updateOne({ _id: req.params.id }, {
