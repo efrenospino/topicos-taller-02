@@ -67,8 +67,11 @@ const getUserTweets = (req, res) => {
 }
 
 const getCountTweets = (req, res) => {
+    
 
-
+    Tweet.find({ user: req.body.id })  
+    .then((r) => res.send(r.length.toString()))
+    .catch((_) => res.sendStatus(404));
 
 
 }
