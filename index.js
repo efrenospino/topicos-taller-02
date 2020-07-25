@@ -24,7 +24,8 @@ app.get('*', (_, res) => {
     res.send('URL inválida.');
 });
 
-mongoose.connect('mongodb://localhost/twitter', {
+// Hardcoding conexión a la BD 
+mongoose.connect('mongodb+srv://admin:admin@cluster0.bzdfi.mongodb.net/mongodb?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }, () => {
