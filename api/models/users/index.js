@@ -24,7 +24,11 @@ const userSchema = new mongoose.Schema({
     telephones: {
         type: Array,
         required: false
-    }
+    },
+    birthdate: {
+        type: String,
+        required: true
+    }, //YYYY-MM-DD
 }, {
     timestamps: true
 });
