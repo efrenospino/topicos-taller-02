@@ -109,3 +109,6 @@ dist
 # Logs
 access.log
 logs/
+
+# Jest
+globalConfig.json
