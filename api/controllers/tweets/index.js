@@ -44,9 +44,21 @@ const update = (req, res) => {
 }
 
 const remove = (req, res) => {
-    Tweet.remove({ _id: req.body.id })
-        .then(() => res.sendStatus(200))
-        .catch(() => res.sendStatus(500));
+    
+
+    Tweet.exists({
+        _id: id,
+        user: req.userId,
+    }).then(existTweet=> {
+        if (existTweet) {
+            Tweet.remove({ _id: req.body.id })
+            .then(() => res.sendStatus(200))
+            .catch(() => res.sendStatus(500));
+        } else {
+            res.status(400).send("Acceso Denegato a Peticion.");
+        }
+    })
+    .catch(() => res.sendStatus(500));
 }
 
 const newComment = (req, res) => {

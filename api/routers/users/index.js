@@ -3,8 +3,10 @@ const router = express.Router();
 const controller = require('./../../controllers/users');
 const logger = require('./../../middlewares/logger');
 
+const validate = require('./../../middlewares/vallistuser');
+
 router.route('/')
-    .get(controller.getAll)
+    .get(validate,controller.getAll)
     .post(logger, controller.create)
     .delete(logger, controller.remove);
 

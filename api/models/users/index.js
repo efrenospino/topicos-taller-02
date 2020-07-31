@@ -25,10 +25,17 @@ const userSchema = new mongoose.Schema({
         type: Array,
         required: false
     },
-    birthdate: {
+    birthdate: {    //YYYY-MM-DD
         type: String,
         required: true
-    }, //YYYY-MM-DD
+    },
+    role_ids: 
+    [{
+        role:{ 
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'roles'
+        } 
+    }], 
 }, {
     timestamps: true
 });

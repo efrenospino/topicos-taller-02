@@ -4,10 +4,11 @@ const Tweet = require('./../../models/tweets');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('./../../functions/crypto');
-const config = require('./../../../config');
+const config = require('./../../../config');  
 
 const getAll = (_, res) => {
-    User.find({}, ['username', 'name'])
+    User.find({}, ['username', 'role_ids'])
+    .populate('role_ids.rol', ['name', 'permission_ids'])
         .then((r) => res.send(r))
         .catch((_) => res.sendStatus(500));
 }
@@ -30,6 +31,8 @@ const create = (req, res) => {
     const salt = bcrypt.genSaltSync(saltRounds);
     const password = bcrypt.hashSync(req.body.password, salt);
     const birthdate = crypto.encrypt(req.body.birthdate);
+
+
     const user = {
         name: req.body.name,
         age: req.body.age,
