@@ -4,31 +4,31 @@ const controller = require('./../../controllers/tweets');
 const authentication = require('./../../middlewares/authentication');
 
 router.route('/')
-    .get(controller.getAll)
+    .get(authentication,controller.getAll)
     .post(authentication, controller.create)
     .delete(controller.remove);
 
 router.route('/lasts/:count')
-    .get(controller.getLastNTweets);
+    .get(authentication,controller.getLastNTweets);
 
 router.route('/top/commenters/:count')
-    .get(controller.getTopNTweet);
+    .get(authentication,controller.getTopNTweet);
 
 
 router.route('/:id')
-    .get(controller.getByID)
-    .put(controller.update);
+    .get(authentication,controller.getByID)
+    .put(authentication,controller.update);
 
 router.route('/:id/comment')
-    .post(controller.newComment);
+    .post(authentication,controller.newComment);
 
 router.route('/:id/comments')
-    .delete(controller.removeComment);
+    .delete(authentication,controller.removeComment);
 
 router.route('/:id/comments/count')
-    .get(controller.getCommentsCount)
+    .get(authentication,controller.getCommentsCount)
 
 router.route('/top/:count')
-    .get(controller.getTopCommentedTweets)
+    .get(authentication,controller.getTopCommentedTweets)
 
 module.exports = router;
